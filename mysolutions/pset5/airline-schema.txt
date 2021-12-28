@@ -1,0 +1,36 @@
+flight(flight_no, date,   time, src, dst, is_inter, aircraft_type)
+   FK aircraft(aircraft_type)
+
+aircraft(aircraft_type,   manufacturer, model)
+
+seat(aircraft_type, seat_no,   class, seat_type, is_exit)
+   FK aircraft(aircraft_type)
+
+
+ customer(customer_id,   first_name, last_name, emaili, phone)
+
+phone(customer_id, phone_no)
+   FK customer(customer_id)
+
+purchaser(customer_id,   cc_no, cc_exp, cc_cvc)
+   FK customer(customer_id)
+
+purchase(purchase_id,   customer_id, timestamp, confirmation_no)
+   FK customer(customer_id)
+
+traveller(customer_id,   pport_no, country, emergency_contact, emergency_phone, freq_flyer_no)
+   FK customer(customer_id)
+
+ticket(ticket_id,   price, flight_no, aircraft_type, seat_no, purchase_id, customer_id)
+   FK flight(flight_no, date)
+   FK seat(aircraft_type, seat_no) 
+   FK purchase(purchase_id)
+   FK customer(customer_id)
+   CHECK flight_no.aircraft_type = aircraft_type
+
+
+Schema combinations:
+- "purchased" relationship between "ticket" and purchased is many-to-one, so can be a non-null fk in "ticket"; this will enforce total participation by "ticket"
+- same for "travelled" relationship
+- in general, one-to-many relationships have been combined on the "one" schema.
+
